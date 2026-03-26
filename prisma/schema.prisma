@@ -8,7 +8,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model Account {
+model User {
   id    String  @id @default(nanoid())
   phone String? @unique
   email String? @unique
@@ -19,5 +19,5 @@ model Account {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("account")
+  @@map("user")
 }

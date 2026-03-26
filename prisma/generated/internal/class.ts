@@ -20,7 +20,7 @@ const config: runtime.GetPrismaClientConfig = {
   "clientVersion": "7.5.0",
   "engineVersion": "280c870be64f457428992c43c1f6d557fab6e29e",
   "activeProvider": "postgresql",
-  "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"./generated/\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel Account {\n  id    String  @id @default(nanoid())\n  phone String? @unique\n  email String? @unique\n\n  phoneVerifiedAt DateTime? @map(\"phone_verified_at\")\n  emailVerifiedAt DateTime? @map(\"email_verified_at\")\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"account\")\n}\n",
+  "inlineSchema": "generator client {\n  provider     = \"prisma-client\"\n  output       = \"./generated/\"\n  moduleFormat = \"cjs\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n}\n\nmodel User {\n  id    String  @id @default(nanoid())\n  phone String? @unique\n  email String? @unique\n\n  phoneVerifiedAt DateTime? @map(\"phone_verified_at\")\n  emailVerifiedAt DateTime? @map(\"email_verified_at\")\n\n  createdAt DateTime @default(now()) @map(\"created_at\")\n  updatedAt DateTime @updatedAt @map(\"updated_at\")\n\n  @@map(\"user\")\n}\n",
   "runtimeDataModel": {
     "models": {},
     "enums": {},
@@ -32,9 +32,9 @@ const config: runtime.GetPrismaClientConfig = {
   }
 }
 
-config.runtimeDataModel = JSON.parse("{\"models\":{\"Account\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phoneVerifiedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"phone_verified_at\"},{\"name\":\"emailVerifiedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"email_verified_at\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"account\"}},\"enums\":{},\"types\":{}}")
+config.runtimeDataModel = JSON.parse("{\"models\":{\"User\":{\"fields\":[{\"name\":\"id\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phone\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"email\",\"kind\":\"scalar\",\"type\":\"String\"},{\"name\":\"phoneVerifiedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"phone_verified_at\"},{\"name\":\"emailVerifiedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"email_verified_at\"},{\"name\":\"createdAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"created_at\"},{\"name\":\"updatedAt\",\"kind\":\"scalar\",\"type\":\"DateTime\",\"dbName\":\"updated_at\"}],\"dbName\":\"user\"}},\"enums\":{},\"types\":{}}")
 config.parameterizationSchema = {
-  strings: JSON.parse("[\"where\",\"Account.findUnique\",\"Account.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"Account.findFirst\",\"Account.findFirstOrThrow\",\"Account.findMany\",\"data\",\"Account.createOne\",\"Account.createMany\",\"Account.createManyAndReturn\",\"Account.updateOne\",\"Account.updateMany\",\"Account.updateManyAndReturn\",\"create\",\"update\",\"Account.upsertOne\",\"Account.deleteOne\",\"Account.deleteMany\",\"having\",\"_count\",\"_min\",\"_max\",\"Account.groupBy\",\"Account.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"phone\",\"email\",\"phoneVerifiedAt\",\"emailVerifiedAt\",\"createdAt\",\"updatedAt\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"set\"]"),
+  strings: JSON.parse("[\"where\",\"User.findUnique\",\"User.findUniqueOrThrow\",\"orderBy\",\"cursor\",\"User.findFirst\",\"User.findFirstOrThrow\",\"User.findMany\",\"data\",\"User.createOne\",\"User.createMany\",\"User.createManyAndReturn\",\"User.updateOne\",\"User.updateMany\",\"User.updateManyAndReturn\",\"create\",\"update\",\"User.upsertOne\",\"User.deleteOne\",\"User.deleteMany\",\"having\",\"_count\",\"_min\",\"_max\",\"User.groupBy\",\"User.aggregate\",\"AND\",\"OR\",\"NOT\",\"id\",\"phone\",\"email\",\"phoneVerifiedAt\",\"emailVerifiedAt\",\"createdAt\",\"updatedAt\",\"equals\",\"in\",\"notIn\",\"lt\",\"lte\",\"gt\",\"gte\",\"not\",\"contains\",\"startsWith\",\"endsWith\",\"set\"]"),
   graph: "NQkQChoAACkAMBsAAAQAEBwAACkAMB0BAAAAAR4BAAAAAR8BAAAAASBAACwAISFAACwAISJAAC0AISNAAC0AIQEAAAABACABAAAAAQAgChoAACkAMBsAAAQAEBwAACkAMB0BACoAIR4BACsAIR8BACsAISBAACwAISFAACwAISJAAC0AISNAAC0AIQQeAAAuACAfAAAuACAgAAAuACAhAAAuACADAAAABAAgAwAABQAwBAAAAQAgAwAAAAQAIAMAAAUAMAQAAAEAIAMAAAAEACADAAAFADAEAAABACAHHQEAAAABHgEAAAABHwEAAAABIEAAAAABIUAAAAABIkAAAAABI0AAAAABAQgAAAkAIAcdAQAAAAEeAQAAAAEfAQAAAAEgQAAAAAEhQAAAAAEiQAAAAAEjQAAAAAEBCAAACwAwAQgAAAsAMAcdAQAyACEeAQAzACEfAQAzACEgQAA0ACEhQAA0ACEiQAA1ACEjQAA1ACECAAAAAQAgCAAADgAgBx0BADIAIR4BADMAIR8BADMAISBAADQAISFAADQAISJAADUAISNAADUAIQIAAAAEACAIAAAQACACAAAABAAgCAAAEAAgAwAAAAEAIA8AAAkAIBAAAA4AIAEAAAABACABAAAABAAgBxUAAC8AIBYAADEAIBcAADAAIB4AAC4AIB8AAC4AICAAAC4AICEAAC4AIAoaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAcACEfAQAcACEgQAAdACEhQAAdACEiQAAeACEjQAAeACEDAAAABAAgAwAAFgAwFAAAFwAgAwAAAAQAIAMAAAUAMAQAAAEAIAoaAAAaADAbAAAXABAcAAAaADAdAQAbACEeAQAcACEfAQAcACEgQAAdACEhQAAdACEiQAAeACEjQAAeACEOFQAAIAAgFgAAKAAgFwAAKAAgJAEAAAABJQEAAAAEJgEAAAAEJwEAAAABKAEAAAABKQEAAAABKgEAAAABKwEAJwAhLAEAAAABLQEAAAABLgEAAAABDhUAACMAIBYAACYAIBcAACYAICQBAAAAASUBAAAABSYBAAAABScBAAAAASgBAAAAASkBAAAAASoBAAAAASsBACUAISwBAAAAAS0BAAAAAS4BAAAAAQsVAAAjACAWAAAkACAXAAAkACAkQAAAAAElQAAAAAUmQAAAAAUnQAAAAAEoQAAAAAEpQAAAAAEqQAAAAAErQAAiACELFQAAIAAgFgAAIQAgFwAAIQAgJEAAAAABJUAAAAAEJkAAAAAEJ0AAAAABKEAAAAABKUAAAAABKkAAAAABK0AAHwAhCxUAACAAIBYAACEAIBcAACEAICRAAAAAASVAAAAABCZAAAAABCdAAAAAAShAAAAAASlAAAAAASpAAAAAAStAAB8AIQgkAgAAAAElAgAAAAQmAgAAAAQnAgAAAAEoAgAAAAEpAgAAAAEqAgAAAAErAgAgACEIJEAAAAABJUAAAAAEJkAAAAAEJ0AAAAABKEAAAAABKUAAAAABKkAAAAABK0AAIQAhCxUAACMAIBYAACQAIBcAACQAICRAAAAAASVAAAAABSZAAAAABSdAAAAAAShAAAAAASlAAAAAASpAAAAAAStAACIAIQgkAgAAAAElAgAAAAUmAgAAAAUnAgAAAAEoAgAAAAEpAgAAAAEqAgAAAAErAgAjACEIJEAAAAABJUAAAAAFJkAAAAAFJ0AAAAABKEAAAAABKUAAAAABKkAAAAABK0AAJAAhDhUAACMAIBYAACYAIBcAACYAICQBAAAAASUBAAAABSYBAAAABScBAAAAASgBAAAAASkBAAAAASoBAAAAASsBACUAISwBAAAAAS0BAAAAAS4BAAAAAQskAQAAAAElAQAAAAUmAQAAAAUnAQAAAAEoAQAAAAEpAQAAAAEqAQAAAAErAQAmACEsAQAAAAEtAQAAAAEuAQAAAAEOFQAAIAAgFgAAKAAgFwAAKAAgJAEAAAABJQEAAAAEJgEAAAAEJwEAAAABKAEAAAABKQEAAAABKgEAAAABKwEAJwAhLAEAAAABLQEAAAABLgEAAAABCyQBAAAAASUBAAAABCYBAAAABCcBAAAAASgBAAAAASkBAAAAASoBAAAAASsBACgAISwBAAAAAS0BAAAAAS4BAAAAAQoaAAApADAbAAAEABAcAAApADAdAQAqACEeAQArACEfAQArACEgQAAsACEhQAAsACEiQAAtACEjQAAtACELJAEAAAABJQEAAAAEJgEAAAAEJwEAAAABKAEAAAABKQEAAAABKgEAAAABKwEAKAAhLAEAAAABLQEAAAABLgEAAAABCyQBAAAAASUBAAAABSYBAAAABScBAAAAASgBAAAAASkBAAAAASoBAAAAASsBACYAISwBAAAAAS0BAAAAAS4BAAAAAQgkQAAAAAElQAAAAAUmQAAAAAUnQAAAAAEoQAAAAAEpQAAAAAEqQAAAAAErQAAkACEIJEAAAAABJUAAAAAEJkAAAAAEJ0AAAAABKEAAAAABKUAAAAABKkAAAAABK0AAIQAhAAAAAAEvAQAAAAEBLwEAAAABAS9AAAAAAQEvQAAAAAEAAAAAAxUABhYABxcACAAAAAMVAAYWAAcXAAgBAgECAwEFBgEGBwEHCAEJCgEKDAILDQMMDwENEQIOEgQREwESFAETFQIYGAUZGQk"
 }
 
@@ -70,8 +70,8 @@ export interface PrismaClientConstructor {
    * const prisma = new PrismaClient({
    *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
    * })
-   * // Fetch zero or more Accounts
-   * const accounts = await prisma.account.findMany()
+   * // Fetch zero or more Users
+   * const users = await prisma.user.findMany()
    * ```
    * 
    * Read more in our [docs](https://pris.ly/d/client).
@@ -94,8 +94,8 @@ export interface PrismaClientConstructor {
  * const prisma = new PrismaClient({
  *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
  * })
- * // Fetch zero or more Accounts
- * const accounts = await prisma.account.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  * 
  * Read more in our [docs](https://pris.ly/d/client).
@@ -189,14 +189,14 @@ export interface PrismaClient<
   }>>
 
       /**
-   * `prisma.account`: Exposes CRUD operations for the **Account** model.
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
-    * // Fetch zero or more Accounts
-    * const accounts = await prisma.account.findMany()
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
     * ```
     */
-  get account(): Prisma.AccountDelegate<ExtArgs, { omit: OmitOpts }>;
+  get user(): Prisma.UserDelegate<ExtArgs, { omit: OmitOpts }>;
 }
 
 export function getPrismaClientClass(): PrismaClientConstructor {
