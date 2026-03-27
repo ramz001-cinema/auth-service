@@ -34,7 +34,7 @@
     "@nestjs/platform-express": "^11.1.17",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^7.5.0",
-    "@ramz001-cinema/contracts": "^1.0.4",
+    "@ramz001-cinema/contracts": "^1.0.5",
     "@ramz001-cinema/core": "^1.0.4",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "dotenv": "^17.3.1",

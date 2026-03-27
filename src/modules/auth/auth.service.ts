@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import {
-  OtpType,
-  type SendOtpRequest,
-} from "@ramz001-cinema/contracts/gen/auth";
-import type { AuthRepository } from "./auth.repository";
-import type { User } from "@prisma/generated/client";
+import { OtpType, SendOtpRequest } from "@ramz001-cinema/contracts/gen/auth";
+import { AuthRepository } from "./auth.repository";
+import { User } from "@prisma/generated/client";
 
 @Injectable()
 export class AuthService {

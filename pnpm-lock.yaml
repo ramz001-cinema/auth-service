@@ -39,8 +39,8 @@ importers:
         specifier: ^7.5.0
         version: 7.5.0(prisma@7.5.0(@types/react@19.2.14)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3))(typescript@5.9.3)
       '@ramz001-cinema/contracts':
-        specifier: ^1.0.4
-        version: 1.0.4(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)(reflect-metadata@0.2.2)
+        specifier: ^1.0.5
+        version: 1.0.5(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)(reflect-metadata@0.2.2)
       '@ramz001-cinema/core':
         specifier: ^1.0.4
         version: 1.0.4(prettier@3.8.1)
@@ -972,8 +972,8 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@ramz001-cinema/contracts@1.0.4':
-    resolution: {integrity: sha512-MxdMdfK0wdMY+GI0ndcaqjXg3p7xHU3RvvYkqAJLiXSF7YVM7HT3MB8jtoNZXvI+q1+2qmxsyLuWY9HEf5Pxhw==}
+  '@ramz001-cinema/contracts@1.0.5':
+    resolution: {integrity: sha512-MR29B6Xofw/wfoI2LN4WR5tU9PiwXUDeONX1hB7dUAvobgZurlCR47JZHruvkSsqUd5RUvhB0dctVcEU/MljJA==}
 
   '@ramz001-cinema/core@1.0.4':
     resolution: {integrity: sha512-KN3qYoImqzW+1B0FcZXPbrN4hoZ56zV8TdEdzkIFnWG258NOiyADmhy/5KzfB/RyiiNJqQ/iouxUdywTB5j9/w==}
@@ -4598,7 +4598,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@ramz001-cinema/contracts@1.0.4(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)(reflect-metadata@0.2.2)':
+  '@ramz001-cinema/contracts@1.0.5(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)(reflect-metadata@0.2.2)':
     dependencies:
       '@nestjs/microservices': 11.1.17(@grpc/grpc-js@1.14.3)(@nestjs/common@11.1.17(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.17)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       protobufjs: 8.0.0
