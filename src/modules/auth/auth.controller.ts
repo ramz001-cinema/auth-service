@@ -12,7 +12,6 @@ export class AuthController {
 
   @GrpcMethod("AuthService", "SendOtp")
   async sendOtp(data: SendOtpRequest): Promise<SendOtpResponse> {
-    console.log("Received SendOtp request:", data);
-    return await Promise.resolve({ ok: true });
+    return await this.authService.sendOtp(data);
   }
 }
