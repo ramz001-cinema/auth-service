@@ -9,6 +9,7 @@ export class AuthService {
 
   async sendOtp(data: SendOtpRequest) {
     const { id, type } = data;
+    console.log(data);
 
     let user: User | null = null;
 
