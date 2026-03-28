@@ -2,10 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { OtpType, SendOtpRequest } from "@ramz001-cinema/contracts/gen/auth";
 import { AuthRepository } from "./auth.repository";
 import { User } from "@prisma/generated/client";
+import { OtpService } from "../otp/otp.service";
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepository) {}
+  constructor(
+    private readonly authRepository: AuthRepository,
+    private readonly otpService: OtpService,
+  ) {}
 
   async sendOtp(data: SendOtpRequest) {
     const { id, type } = data;
@@ -28,6 +32,10 @@ export class AuthService {
         phone: type === OtpType.OTP_TYPE_PHONE ? id : undefined,
       });
     }
+    const code = await this.otpService.sendOtp(id, type);
+
+    console.info(`OTP code for ${id} is ${code}`);
+
     return { ok: true };
   }
 }
