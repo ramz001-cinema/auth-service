@@ -1,7 +1,7 @@
 import { RedisService } from "@/infrastructure/redis/redis.service";
 import { Injectable } from "@nestjs/common";
 import { OtpType } from "@ramz001-cinema/contracts/gen/auth";
-import { createHash } from "node:crypto";
+import { createHash, randomInt } from "node:crypto";
 
 @Injectable()
 export class OtpService {
@@ -17,7 +17,7 @@ export class OtpService {
   }
 
   private generateCode() {
-    const code = Math.floor(100000 + Math.random() * 900000).toString();
+    const code = randomInt(100000, 1000000).toString();
     const hash = createHash("sha256").update(code).digest("hex");
 
     return { hash, code };
