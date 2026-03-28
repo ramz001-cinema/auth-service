@@ -11,4 +11,11 @@ export class AuthController {
   async sendOtp(data: auth.SendOtpRequest): Promise<auth.SendOtpResponse> {
     return await this.authService.sendOtp(data);
   }
+
+  @GrpcMethod("AuthService", "VerifyOtp")
+  async verifyOtp(
+    data: auth.VerifyOtpRequest,
+  ): Promise<auth.VerifyOtpResponse> {
+    return await this.authService.verifyOtp(data);
+  }
 }
