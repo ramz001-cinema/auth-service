@@ -34,7 +34,7 @@
     "@nestjs/platform-express": "^11.1.17",
     "@prisma/adapter-pg": "^7.6.0",
     "@prisma/client": "^7.6.0",
-    "@ramz001-cinema/contracts": "^2.0.0",
+    "@ramz001-cinema/contracts": "^2.0.1",
     "@ramz001-cinema/core": "^1.0.7",
     "dotenv": "^17.3.1",
     "ioredis": "^5.10.1",

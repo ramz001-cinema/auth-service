@@ -1,7 +1,6 @@
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { Injectable } from '@nestjs/common'
-import { RpcException } from '@nestjs/microservices'
-import { OtpType } from '@ramz001-cinema/contracts'
+import { GrpcException, OtpType } from '@ramz001-cinema/contracts'
 import { createHash, randomInt } from 'node:crypto'
 
 @Injectable()
@@ -18,11 +17,13 @@ export class OtpService {
 	async verify(id: string, type: OtpType, code: string) {
 		const storedHash = await this.redisService.get(`otp:${type}:${id}`)
 
-		if (!storedHash) throw new RpcException('OTP not found or expired')
+		if (!storedHash)
+			throw GrpcException.notFound('Otp not found or expired')
 
 		const incomingHash = createHash('sha256').update(code).digest('hex')
 
-		if (incomingHash !== storedHash) throw new RpcException('Invalid OTP')
+		if (incomingHash !== storedHash)
+			throw GrpcException.invalidArgument('Invalid OTP')
 
 		await this.redisService.del(`otp:${type}:${id}`)
 	}
