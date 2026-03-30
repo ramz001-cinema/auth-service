@@ -1,7 +1,7 @@
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { Injectable } from '@nestjs/common'
 import { RpcException } from '@nestjs/microservices'
-import { OtpType } from '@ramz001-cinema/contracts/gen/auth'
+import { OtpType } from '@ramz001-cinema/contracts'
 import { createHash, randomInt } from 'node:crypto'
 
 @Injectable()

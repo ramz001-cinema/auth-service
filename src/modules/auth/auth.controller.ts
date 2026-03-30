@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { GrpcMethod } from '@nestjs/microservices'
-import * as auth from '@ramz001-cinema/contracts/gen/auth'
+import * as auth from '@ramz001-cinema/contracts'
 
 @Controller()
 export class AuthController {

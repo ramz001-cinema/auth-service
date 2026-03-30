@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common'
 import {
 	OtpType,
 	SendOtpRequest,
-	VerifyOtpRequest
-} from '@ramz001-cinema/contracts/gen/auth'
+	VerifyOtpRequest,
+	GrpcException
+} from '@ramz001-cinema/contracts'
 import { AuthRepository } from './auth.repository'
 import { User } from '@prisma/generated/client'
 import { OtpService } from '../otp/otp.service'
-import { RpcException } from '@nestjs/microservices'
 
 @Injectable()
 export class AuthService {
@@ -42,6 +42,7 @@ export class AuthService {
 
 		return { ok: true }
 	}
+
 	async verifyOtp(data: VerifyOtpRequest) {
 		const { id, type, otp } = data
 
@@ -58,7 +59,7 @@ export class AuthService {
 				break
 		}
 
-		if (!user) throw new RpcException('User not found')
+		if (!user) throw GrpcException.notFound('User not found')
 
 		if (type === OtpType.OTP_TYPE_EMAIL && !user.emailVerifiedAt) {
 			await this.authRepository.updateUser(user.id, {
