@@ -20,7 +20,8 @@ export class RedisService
 			password: configService.get<string>('REDIS_PASSWORD'),
 			username: configService.get<string>('REDIS_USER'),
 			maxRetriesPerRequest: 5,
-			enableOfflineQueue: true
+			enableOfflineQueue: true,
+			lazyConnect: true
 		})
 	}
 
