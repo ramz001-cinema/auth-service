@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { Transport, MicroserviceOptions } from '@nestjs/microservices'
 import { ConfigService } from '@nestjs/config'
+import { PROTO_PATHS } from '@ramz001-cinema/contracts'
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
@@ -11,8 +12,7 @@ async function bootstrap() {
 		transport: Transport.GRPC,
 		options: {
 			package: 'auth.v1',
-			protoPath:
-				'node_modules/@ramz001-cinema/contracts/proto/auth.proto',
+			protoPath: PROTO_PATHS.AUTH,
 			url: config.getOrThrow<string>('AUTH_GRPC_URL'),
 			loader: {
 				keepCase: false,
