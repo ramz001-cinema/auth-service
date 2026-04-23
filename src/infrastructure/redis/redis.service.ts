@@ -1,3 +1,4 @@
+import { EnvType } from '@/common/config'
 import {
 	Injectable,
 	Logger,
@@ -13,7 +14,7 @@ export class RedisService
 	implements OnModuleInit, OnModuleDestroy
 {
 	private readonly logger = new Logger(RedisService.name)
-	constructor(private readonly configService: ConfigService) {
+	constructor(private readonly configService: ConfigService<EnvType>) {
 		super({
 			host: configService.get<string>('REDIS_HOST'),
 			port: configService.get<number>('REDIS_PORT'),
