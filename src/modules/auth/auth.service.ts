@@ -8,12 +8,14 @@ import {
 import { AuthRepository } from './auth.repository'
 import { User } from '@prisma/generated/client'
 import { OtpService } from '../otp/otp.service'
+import { PassportService } from '@ramz001-cinema/passport'
 
 @Injectable()
 export class AuthService {
 	constructor(
 		private readonly authRepository: AuthRepository,
-		private readonly otpService: OtpService
+		private readonly otpService: OtpService,
+		private readonly passportService: PassportService
 	) {}
 
 	async sendOtp(data: SendOtpRequest) {
@@ -73,6 +75,9 @@ export class AuthService {
 			})
 		}
 
-		return { accessToken: 'access_token', refreshToken: 'refresh_token' }
+		return {
+			accessToken: this.passportService.generate(user.id, 1000),
+			refreshToken: 'refresh_token'
+		}
 	}
 }
