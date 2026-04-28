@@ -14,9 +14,7 @@ export class PrismaService
 
 	constructor(private readonly configService: ConfigService<EnvType>) {
 		const adapter = new PrismaPg({
-			connectionString: configService.getOrThrow<string>('DATABASE_URL', {
-				infer: true
-			})
+			connectionString: configService.getOrThrow<string>('DATABASE_URL')
 		})
 		super({ adapter })
 	}

@@ -13,10 +13,7 @@ import { EnvType } from '@/common/config'
 			inject: [ConfigService],
 			useFactory: (configService: ConfigService<EnvType>) => ({
 				secretKey: configService.getOrThrow<string>(
-					'PASSPORT_SECRET_KEY',
-					{
-						infer: true
-					}
+					'PASSPORT_SECRET_KEY'
 				)
 			})
 		})
