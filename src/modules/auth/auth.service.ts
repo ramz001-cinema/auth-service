@@ -3,7 +3,8 @@ import {
 	OtpType,
 	SendOtpRequest,
 	VerifyOtpRequest,
-	GrpcException
+	GrpcException,
+	RefreshTokenRequest
 } from '@ramz001-cinema/contracts'
 import { AuthRepository } from './auth.repository'
 import { User } from '@prisma/generated/client'
@@ -91,8 +92,27 @@ export class AuthService {
 		return this.generateTokens(user.id)
 	}
 
+	refreshToken(data: RefreshTokenRequest) {
+		const { refreshToken } = data
+
+		const result = this.passportService.verify(refreshToken)
+
+		if (!result.valid) {
+			throw GrpcException.unauthenticated(
+				result.reason || 'Invalid refresh token'
+			)
+		}
+		if (!result.userId) {
+			throw GrpcException.invalidArgument(
+				'Invalid token payload: missing userId'
+			)
+		}
+
+		return this.generateTokens(result.userId)
+	}
+
 	// Generates access and refresh tokens for a given user ID
-	generateTokens(userId: string) {
+	private generateTokens(userId: string) {
 		return {
 			accessToken: this.passportService.generate(
 				userId,

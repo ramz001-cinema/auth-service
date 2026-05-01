@@ -18,4 +18,8 @@ export class AuthController {
 	): Promise<auth.VerifyOtpResponse> {
 		return await this.authService.verifyOtp(data)
 	}
+	@GrpcMethod('AuthService', 'RefreshToken')
+	refreshToken(data: auth.RefreshTokenRequest): auth.RefreshTokenResponse {
+		return this.authService.refreshToken(data)
+	}
 }
