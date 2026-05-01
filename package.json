@@ -36,7 +36,7 @@
 		"@nestjs/platform-express": "^11.1.19",
 		"@prisma/adapter-pg": "^7.8.0",
 		"@prisma/client": "^7.8.0",
-		"@ramz001-cinema/contracts": "^2.0.4",
+		"@ramz001-cinema/contracts": "^2.0.5",
 		"@ramz001-cinema/core": "^1.0.7",
 		"@ramz001-cinema/passport": "^1.0.4",
 		"dotenv": "^17.4.2",
@@ -44,7 +44,7 @@
 		"pg": "^8.20.0",
 		"reflect-metadata": "^0.2.2",
 		"rxjs": "^7.8.2",
-		"zod": "^4.3.6"
+		"zod": "^4.4.1"
 	},
 	"devDependencies": {
 		"@eslint/eslintrc": "^3.3.5",
