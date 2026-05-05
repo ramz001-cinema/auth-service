@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { MicroserviceOptions } from '@nestjs/microservices'
 import { Transport } from '@nestjs/microservices'
-import { gprcLoader, grpcPackages, grpcProtoPaths } from './grpc.options'
+import { grpcLoader, grpcPackages, grpcProtoPaths } from './grpc.options'
 import { EnvType } from '@/common/config'
 
 export function createGrpcServer(app: INestApplication) {
@@ -14,7 +14,7 @@ export function createGrpcServer(app: INestApplication) {
 			package: grpcPackages,
 			protoPath: grpcProtoPaths,
 			url: config.getOrThrow<string>('AUTH_GRPC_URL'),
-			loader: gprcLoader
+			loader: grpcLoader
 		}
 	})
 }
