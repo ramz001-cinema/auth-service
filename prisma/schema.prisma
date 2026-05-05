@@ -12,6 +12,7 @@ model User {
   id    String  @id @default(nanoid())
   phone String? @unique
   email String? @unique
+  role  Role    @default(USER)
 
   phoneVerifiedAt DateTime? @map("phone_verified_at")
   emailVerifiedAt DateTime? @map("email_verified_at")
@@ -20,4 +21,11 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("user")
+}
+
+enum Role {
+  USER
+  ADMIN
+
+  @@map("role")
 }
