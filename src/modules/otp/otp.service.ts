@@ -1,7 +1,8 @@
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { Injectable } from '@nestjs/common'
-import { GrpcException, OtpType } from '@ramz001-cinema/contracts'
+import { GrpcException } from '@ramz001-cinema/contracts'
 import { createHash, randomInt } from 'node:crypto'
+import { OtpType } from '@ramz001-cinema/contracts/gen/auth'
 
 @Injectable()
 export class OtpService {

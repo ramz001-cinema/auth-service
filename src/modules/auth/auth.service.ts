@@ -3,9 +3,9 @@ import {
 	OtpType,
 	SendOtpRequest,
 	VerifyOtpRequest,
-	GrpcException,
 	RefreshTokenRequest
-} from '@ramz001-cinema/contracts'
+} from '@ramz001-cinema/contracts/gen/auth'
+import { GrpcException } from '@ramz001-cinema/contracts'
 import { AuthRepository } from './auth.repository'
 import { User } from '@prisma/generated/client'
 import { OtpService } from '../otp/otp.service'
