@@ -6,6 +6,7 @@ import {
 } from '@ramz001-cinema/contracts/gen/account'
 import { convertEnum, GrpcException } from '@ramz001-cinema/contracts'
 import { AccountRepository } from './account.repository'
+import { convertDateToString } from '@/common/utils'
 
 @Injectable()
 export class AccountService {
@@ -23,8 +24,8 @@ export class AccountService {
 			id: user.id,
 			email: user.email || undefined,
 			phone: user.phone ?? undefined,
-			phoneVerifiedAt: user.phoneVerifiedAt || undefined,
-			emailVerifiedAt: user.emailVerifiedAt || undefined,
+			phoneVerifiedAt: convertDateToString(user.phoneVerifiedAt),
+			emailVerifiedAt: convertDateToString(user.emailVerifiedAt),
 			role: convertEnum(Role, user.role)
 		}
 	}

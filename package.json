@@ -36,7 +36,7 @@
 		"@nestjs/platform-express": "^11.1.19",
 		"@prisma/adapter-pg": "^7.8.0",
 		"@prisma/client": "^7.8.0",
-		"@ramz001-cinema/contracts": "^2.1.0",
+		"@ramz001-cinema/contracts": "^2.1.1",
 		"@ramz001-cinema/core": "^1.0.7",
 		"@ramz001-cinema/passport": "^1.0.4",
 		"dotenv": "^17.4.2",
