@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common'
 import {
-	OtpType,
 	SendOtpRequest,
 	VerifyOtpRequest,
 	RefreshTokenRequest
-} from '@ramz001-cinema/contracts/gen/auth'
+} from '@ramz001-cinema/contracts/gen/auth/v1'
+import { ContactType } from '@ramz001-cinema/contracts/gen/common/v1'
 import { GrpcException } from '@ramz001-cinema/contracts'
 import { AuthRepository } from './auth.repository'
 import { User } from '@prisma/generated/client'
@@ -37,20 +37,16 @@ export class AuthService {
 		let user: User | null = null
 
 		switch (type) {
-			case OtpType.OTP_TYPE_PHONE:
+			case ContactType.CONTACT_TYPE_PHONE:
 				user = await this.authRepository.findByPhone(id)
 				break
-			case OtpType.OTP_TYPE_EMAIL:
+			case ContactType.CONTACT_TYPE_EMAIL:
 				user = await this.authRepository.findByEmail(id)
 				break
 		}
 
-		if (!user) {
-			await this.authRepository.createUser({
-				email: type === OtpType.OTP_TYPE_EMAIL ? id : undefined,
-				phone: type === OtpType.OTP_TYPE_PHONE ? id : undefined
-			})
-		}
+		if (!user) throw GrpcException.notFound('User not found')
+
 		const code = await this.otpService.send(id, type)
 
 		console.info(`OTP code for ${id} is ${code}`)
@@ -67,23 +63,23 @@ export class AuthService {
 		let user: User | null = null
 
 		switch (type) {
-			case OtpType.OTP_TYPE_PHONE:
+			case ContactType.CONTACT_TYPE_PHONE:
 				user = await this.authRepository.findByPhone(id)
 				break
-			case OtpType.OTP_TYPE_EMAIL:
+			case ContactType.CONTACT_TYPE_EMAIL:
 				user = await this.authRepository.findByEmail(id)
 				break
 		}
 
 		if (!user) throw GrpcException.notFound('User not found')
 
-		if (type === OtpType.OTP_TYPE_EMAIL && !user.emailVerifiedAt) {
+		if (type === ContactType.CONTACT_TYPE_EMAIL && !user.emailVerifiedAt) {
 			await this.authRepository.updateUser(user.id, {
 				emailVerifiedAt: new Date()
 			})
 		}
 
-		if (type === OtpType.OTP_TYPE_PHONE && !user.phoneVerifiedAt) {
+		if (type === ContactType.CONTACT_TYPE_PHONE && !user.phoneVerifiedAt) {
 			await this.authRepository.updateUser(user.id, {
 				phoneVerifiedAt: new Date()
 			})

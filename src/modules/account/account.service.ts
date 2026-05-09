@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import {
 	GetProfileRequest,
-	GetProfileResponse,
-	Role
-} from '@ramz001-cinema/contracts/gen/account'
+	GetProfileResponse
+} from '@ramz001-cinema/contracts/gen/account/v1'
+import { Role } from '@ramz001-cinema/contracts/gen/common/v1'
 import { convertEnum, GrpcException } from '@ramz001-cinema/contracts'
 import { AccountRepository } from './account.repository'
 import { convertDateToString } from '@/common/utils'

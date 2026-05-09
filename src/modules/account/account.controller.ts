@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common'
 import { AccountService } from './account.service'
-import * as contracts from '@ramz001-cinema/contracts/gen/account'
+import * as contracts from '@ramz001-cinema/contracts/gen/account/v1'
 import { GrpcMethod } from '@nestjs/microservices'
 
 @Controller('account')
