@@ -13,4 +13,18 @@ export class AccountController {
 	): Promise<contracts.GetProfileResponse> {
 		return await this.accountService.getProfile(data)
 	}
+
+	@GrpcMethod('AccountService', 'InitContactChange')
+	async initContactChange(
+		data: contracts.InitContactChangeRequest
+	): Promise<contracts.InitContactChangeResponse> {
+		return await this.accountService.initContactChange(data)
+	}
+
+	@GrpcMethod('AccountService', 'ConfirmContactChange')
+	async confirmContactChange(
+		data: contracts.ConfirmContactChangeRequest
+	): Promise<contracts.ConfirmContactChangeResponse> {
+		return await this.accountService.confirmContactChange(data)
+	}
 }

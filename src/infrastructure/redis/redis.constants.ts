@@ -6,7 +6,7 @@ enum RedisKey {
 }
 
 export class RedisKeys {
-	static otp(type: ContactType, id: string) {
+	static otp(id: string, type: ContactType) {
 		return `${RedisKey.OTP}:${type}:${id}`
 	}
 

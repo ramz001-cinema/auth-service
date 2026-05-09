@@ -14,7 +14,9 @@ const envSchema = z.object({
 		.int()
 		.positive()
 		.min(3600)
-		.max(2592000) // at least 1 hour, max 30 days
+		.max(2592000), // at least 1 hour, max 30 days
+	OTP_TTL: z.coerce.number().int().positive().min(60).max(3600), // at least 1 minute, max 1 hour
+	OTP_SECRET_KEY: z.string().nonempty()
 })
 
 export function validateEnv(config: Record<string, unknown>) {

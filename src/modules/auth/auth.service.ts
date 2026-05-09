@@ -4,14 +4,13 @@ import {
 	VerifyOtpRequest,
 	RefreshTokenRequest
 } from '@ramz001-cinema/contracts/gen/auth/v1'
-import { ContactType } from '@ramz001-cinema/contracts/gen/common/v1'
 import { GrpcException } from '@ramz001-cinema/contracts'
 import { AuthRepository } from './auth.repository'
-import { User } from '@prisma/generated/client'
 import { OtpService } from '../otp/otp.service'
 import { PassportService } from '@ramz001-cinema/passport'
 import { ConfigService } from '@nestjs/config'
 import { EnvType } from '@/common/config'
+import { RedisKeys } from '@/infrastructure/redis/redis.constants'
 
 @Injectable()
 export class AuthService {
@@ -34,20 +33,13 @@ export class AuthService {
 	async sendOtp(data: SendOtpRequest) {
 		const { id, type } = data
 
-		let user: User | null = null
-
-		switch (type) {
-			case ContactType.CONTACT_TYPE_PHONE:
-				user = await this.authRepository.findByPhone(id)
-				break
-			case ContactType.CONTACT_TYPE_EMAIL:
-				user = await this.authRepository.findByEmail(id)
-				break
-		}
+		const user = await this.authRepository.findByContact(id, type)
 
 		if (!user) throw GrpcException.notFound('User not found')
 
-		const code = await this.otpService.send(id, type)
+		const code = await this.otpService.create({
+			key: RedisKeys.otp(id, type)
+		})
 
 		console.info(`OTP code for ${id} is ${code}`)
 
@@ -58,32 +50,16 @@ export class AuthService {
 	async verifyOtp(data: VerifyOtpRequest) {
 		const { id, type, otp } = data
 
-		await this.otpService.verify(id, type, otp)
-
-		let user: User | null = null
-
-		switch (type) {
-			case ContactType.CONTACT_TYPE_PHONE:
-				user = await this.authRepository.findByPhone(id)
-				break
-			case ContactType.CONTACT_TYPE_EMAIL:
-				user = await this.authRepository.findByEmail(id)
-				break
-		}
+		const user = await this.authRepository.findByContact(id, type)
 
 		if (!user) throw GrpcException.notFound('User not found')
 
-		if (type === ContactType.CONTACT_TYPE_EMAIL && !user.emailVerifiedAt) {
-			await this.authRepository.updateUser(user.id, {
-				emailVerifiedAt: new Date()
-			})
-		}
+		await this.otpService.verify({
+			key: RedisKeys.otp(id, type),
+			code: otp
+		})
 
-		if (type === ContactType.CONTACT_TYPE_PHONE && !user.phoneVerifiedAt) {
-			await this.authRepository.updateUser(user.id, {
-				phoneVerifiedAt: new Date()
-			})
-		}
+		await this.authRepository.verifyContact(id, type)
 
 		return this.generateTokens(user.id)
 	}

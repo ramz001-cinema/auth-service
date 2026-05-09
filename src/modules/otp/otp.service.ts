@@ -1,40 +1,90 @@
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { Injectable } from '@nestjs/common'
 import { GrpcException } from '@ramz001-cinema/contracts'
-import { createHash, randomInt } from 'node:crypto'
-import { ContactType } from '@ramz001-cinema/contracts/gen/common/v1'
-import { RedisKeys } from '@/infrastructure/redis/redis.constants'
+import { createHash, randomInt, timingSafeEqual } from 'node:crypto'
+import { ConfigService } from '@nestjs/config'
+import { EnvType } from '@/common/config'
+
+type CreateOtpOptions<T = Record<string, unknown>> = {
+	key: string
+	ttl?: number
+	data?: T
+}
+
+type VerifyOtpOptions = {
+	key: string
+	code: string
+}
+
+type OtpRecord<T = Record<string, unknown>> = {
+	hash: string
+	data?: T
+}
 
 @Injectable()
 export class OtpService {
-	constructor(private readonly redisService: RedisService) {}
+	private readonly OTP_TTL: number
+	private readonly OTP_SECRET: string
 
-	async send(id: string, type: ContactType) {
-		const { hash, code } = this.generateCode()
+	constructor(
+		private readonly redisService: RedisService,
+		private readonly configService: ConfigService<EnvType>
+	) {
+		this.OTP_TTL = this.configService.get('OTP_TTL') || 300
+		this.OTP_SECRET = this.configService.get('OTP_SECRET_KEY') || ''
+	}
 
-		await this.redisService.set(RedisKeys.otp(type, id), hash, 'EX', 300)
+	async create<T = Record<string, unknown>>(options: CreateOtpOptions<T>) {
+		const { key, ttl = this.OTP_TTL, data } = options
+
+		const code = this.generateCode()
+
+		const payload: OtpRecord<T> = {
+			hash: this.hash(code),
+			data
+		}
+
+		await this.redisService.set(key, JSON.stringify(payload), 'EX', ttl)
 
 		return code
 	}
 
-	async verify(id: string, type: ContactType, code: string) {
-		const storedHash = await this.redisService.get(RedisKeys.otp(type, id))
+	async verify<T = Record<string, unknown>>(
+		options: VerifyOtpOptions
+	): Promise<T | undefined> {
+		const { key, code } = options
 
-		if (!storedHash)
-			throw GrpcException.notFound('Otp not found or expired')
+		const raw = await this.redisService.get(key)
 
-		const incomingHash = createHash('sha256').update(code).digest('hex')
+		if (!raw) throw GrpcException.notFound('Otp not found or expired')
 
-		if (incomingHash !== storedHash)
+		const payload = JSON.parse(raw) as OtpRecord<T>
+
+		const incomingHash = this.hash(code)
+
+		if (incomingHash.length !== payload.hash.length) {
 			throw GrpcException.invalidArgument('Invalid OTP')
+		}
 
-		await this.redisService.del(RedisKeys.otp(type, id))
+		const valid = timingSafeEqual(
+			Buffer.from(incomingHash, 'hex'),
+			Buffer.from(payload.hash, 'hex')
+		)
+
+		if (!valid) throw GrpcException.invalidArgument('Invalid OTP')
+
+		await this.redisService.del(key)
+
+		return payload.data
 	}
 
 	private generateCode() {
-		const code = randomInt(100000, 1000000).toString()
-		const hash = createHash('sha256').update(code).digest('hex')
+		return randomInt(100000, 1000000).toString()
+	}
 
-		return { hash, code }
+	private hash(value: string) {
+		return createHash('sha256')
+			.update(value + this.OTP_SECRET)
+			.digest('hex')
 	}
 }

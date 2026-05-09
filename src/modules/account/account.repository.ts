@@ -1,9 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from '@/infrastructure/prisma/prisma.service'
+import { ContactType } from '@ramz001-cinema/contracts/gen/common/v1'
 
 @Injectable()
 export class AccountRepository {
 	constructor(private readonly prismaService: PrismaService) {}
+
+	private now() {
+		return new Date()
+	}
 
 	async findById(id: string) {
 		return this.prismaService.user.findUnique({
@@ -16,6 +21,18 @@ export class AccountRepository {
 				emailVerifiedAt: true,
 				role: true
 			}
+		})
+	}
+
+	async updateByContact(id: string, type: ContactType, newContact: string) {
+		const updateData =
+			type === ContactType.CONTACT_TYPE_EMAIL
+				? { email: newContact, emailVerifiedAt: this.now() }
+				: { phone: newContact, phoneVerifiedAt: this.now() }
+
+		return this.prismaService.user.update({
+			where: { id },
+			data: updateData
 		})
 	}
 }
