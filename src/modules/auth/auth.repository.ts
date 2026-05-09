@@ -19,9 +19,12 @@ export class AuthRepository {
 		})
 	}
 
-	async verifyContact(id: string, type: ContactType) {
+	async verifyContact(identifier: string, type: ContactType) {
 		return await this.prismaService.user.update({
-			where: { id },
+			where:
+				type === ContactType.CONTACT_TYPE_PHONE
+					? { phone: identifier }
+					: { email: identifier },
 			data:
 				type === ContactType.CONTACT_TYPE_PHONE
 					? { phoneVerifiedAt: this.now() }
