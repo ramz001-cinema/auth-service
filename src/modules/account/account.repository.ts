@@ -11,7 +11,7 @@ export class AccountRepository {
 	}
 
 	async findById(id: string) {
-		return this.prismaService.user.findUnique({
+		return await this.prismaService.user.findUnique({
 			where: { id },
 			select: {
 				id: true,
@@ -25,14 +25,12 @@ export class AccountRepository {
 	}
 
 	async updateByContact(id: string, type: ContactType, newContact: string) {
-		const updateData =
-			type === ContactType.CONTACT_TYPE_EMAIL
-				? { email: newContact, emailVerifiedAt: this.now() }
-				: { phone: newContact, phoneVerifiedAt: this.now() }
-
-		return this.prismaService.user.update({
+		return await this.prismaService.user.update({
 			where: { id },
-			data: updateData
+			data:
+				type === ContactType.CONTACT_TYPE_EMAIL
+					? { email: newContact, emailVerifiedAt: this.now() }
+					: { phone: newContact, phoneVerifiedAt: this.now() }
 		})
 	}
 }
