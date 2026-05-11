@@ -5,12 +5,12 @@ import {
 	RefreshTokenRequest
 } from '@ramz001-cinema/contracts/gen/auth/v1'
 import { GrpcException } from '@ramz001-cinema/contracts'
-import { AuthRepository } from './auth.repository'
 import { OtpService } from '../otp/otp.service'
 import { PassportService } from '@ramz001-cinema/passport'
 import { ConfigService } from '@nestjs/config'
 import { EnvType } from '@/common/config'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
+import { UserRepository } from '../user/user.repository'
 
 @Injectable()
 export class AuthService {
@@ -19,7 +19,7 @@ export class AuthService {
 
 	constructor(
 		private readonly configService: ConfigService<EnvType>,
-		private readonly authRepository: AuthRepository,
+		private readonly userRepository: UserRepository,
 		private readonly otpService: OtpService,
 		private readonly passportService: PassportService
 	) {
@@ -31,35 +31,35 @@ export class AuthService {
 
 	// Handles the logic for sending an OTP code to the user based on the provided identifier (phone or email)
 	async sendOtp(data: SendOtpRequest) {
-		const { id, type } = data
+		const { identifier, type } = data
 
-		const user = await this.authRepository.findByContact(id, type)
+		const user = await this.userRepository.findByContact(identifier, type)
 
 		if (!user) throw GrpcException.notFound('User not found')
 
 		const code = await this.otpService.create({
-			key: RedisKeys.otp(id, type)
+			key: RedisKeys.otp(identifier, type)
 		})
 
-		console.info(`OTP code for ${id} is ${code}`)
+		console.info(`OTP code for ${identifier} is ${code}`)
 
 		return { ok: true }
 	}
 
 	// Verifies the provided OTP code and generates tokens if valid
 	async verifyOtp(data: VerifyOtpRequest) {
-		const { id, type, otp } = data
+		const { identifier, type, otp } = data
 
-		const user = await this.authRepository.findByContact(id, type)
+		const user = await this.userRepository.findByContact(identifier, type)
 
 		if (!user) throw GrpcException.notFound('User not found')
 
 		await this.otpService.verify({
-			key: RedisKeys.otp(id, type),
+			key: RedisKeys.otp(identifier, type),
 			code: otp
 		})
 
-		await this.authRepository.verifyContact(id, type)
+		await this.userRepository.verifyContact(identifier, type)
 
 		return this.generateTokens(user.id)
 	}

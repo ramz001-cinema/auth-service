@@ -9,22 +9,22 @@ import {
 } from '@ramz001-cinema/contracts/gen/account/v1'
 import { Role } from '@ramz001-cinema/contracts/gen/common/v1'
 import { convertEnum, GrpcException } from '@ramz001-cinema/contracts'
-import { AccountRepository } from './account.repository'
 import { convertDateToString } from '@/common/utils'
 import { OtpService } from '../otp/otp.service'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
+import { UserRepository } from '../user/user.repository'
 
 @Injectable()
 export class AccountService {
 	constructor(
-		private readonly accountRepository: AccountRepository,
+		private readonly userRepository: UserRepository,
 		private readonly otpService: OtpService
 	) {}
 
 	async getProfile(data: GetProfileRequest): Promise<GetProfileResponse> {
 		const { id } = data
 
-		const user = await this.accountRepository.findById(id)
+		const user = await this.userRepository.findById(id)
 
 		if (!user) {
 			throw GrpcException.notFound('Account not found')
@@ -43,19 +43,19 @@ export class AccountService {
 	async initContactChange(
 		data: InitContactChangeRequest
 	): Promise<InitContactChangeResponse> {
-		const { id, newContact, type } = data
+		const { userId, newContact, type } = data
 
-		const user = await this.accountRepository.findById(id)
+		const user = await this.userRepository.findById(userId)
 
 		if (!user) throw GrpcException.notFound('Account not found')
 
 		const otp = await this.otpService.create({
-			key: RedisKeys.pendingContactChange(id, type),
+			key: RedisKeys.pendingContactChange(userId, type),
 			data: { newContact }
 		})
 
 		console.info(
-			`OTP for confirming ${type} change for user ${id} is ${otp}`
+			`OTP for confirming ${type} change for user ${userId} is ${otp}`
 		)
 
 		return { ok: true }
@@ -64,10 +64,10 @@ export class AccountService {
 	async confirmContactChange(
 		data: ConfirmContactChangeRequest
 	): Promise<ConfirmContactChangeResponse> {
-		const { id, type, otp } = data
+		const { userId, type, otp } = data
 
 		const result = await this.otpService.verify<{ newContact: string }>({
-			key: RedisKeys.pendingContactChange(id, type),
+			key: RedisKeys.pendingContactChange(userId, type),
 			code: otp
 		})
 
@@ -75,8 +75,8 @@ export class AccountService {
 			throw GrpcException.notFound('No pending contact change found')
 		}
 
-		await this.accountRepository.updateByContact(
-			id,
+		await this.userRepository.updateByContact(
+			userId,
 			type,
 			result.newContact
 		)

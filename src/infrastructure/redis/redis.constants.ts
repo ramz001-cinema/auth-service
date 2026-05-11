@@ -6,11 +6,11 @@ enum RedisKey {
 }
 
 export class RedisKeys {
-	static otp(id: string, type: ContactType) {
-		return `${RedisKey.OTP}:${type}:${id}`
+	static otp(identifier: string, type: ContactType) {
+		return `${RedisKey.OTP}:${type}:${identifier}`
 	}
 
-	static pendingContactChange(id: string, type: ContactType) {
-		return `${RedisKey.PENDING_CONTACT_CHANGE}:${type}:${id}`
+	static pendingContactChange(user_id: string, type: ContactType) {
+		return `${RedisKey.PENDING_CONTACT_CHANGE}:${type}:${user_id}`
 	}
 }

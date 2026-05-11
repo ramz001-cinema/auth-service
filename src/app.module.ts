@@ -6,6 +6,7 @@ import { RedisModule } from './infrastructure/redis/redis.module'
 import { OtpModule } from './modules/otp/otp.module'
 import { validateEnv } from './common/config'
 import { AccountModule } from './modules/account/account.module'
+import { UserModule } from './modules/user/user.module';
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { AccountModule } from './modules/account/account.module'
 		PrismaModule,
 		RedisModule,
 		OtpModule,
-		AccountModule
+		AccountModule,
+		UserModule
 	]
 })
 export class AppModule {}
