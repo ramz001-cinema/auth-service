@@ -36,7 +36,7 @@ export class AccountService {
 			phone: user.phone ?? undefined,
 			phoneVerifiedAt: convertDateToString(user.phoneVerifiedAt),
 			emailVerifiedAt: convertDateToString(user.emailVerifiedAt),
-			role: convertEnum(Role, user.role)
+			role: convertEnum(Role, 'ROLE_' + user.role)
 		}
 	}
 
