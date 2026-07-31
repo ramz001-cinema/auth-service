@@ -8,6 +8,7 @@ import { validateEnv } from './common/config'
 import { AccountModule } from './modules/account/account.module'
 import { UserModule } from './modules/user/user.module';
 import { TelegramModule } from './modules/telegram/telegram.module';
+import { TelegramModule } from './modules/telegram/telegram.module';
 
 @Module({
 	imports: [
