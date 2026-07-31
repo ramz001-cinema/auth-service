@@ -8,3 +8,9 @@ minimumReleaseAgeExclude:
   - '@ramz001-cinema/contracts'
   - '@ramz001-cinema/passport'
   - '@ramz001-cinema/core'
+  - js-yaml@3.15.0
+  - brace-expansion@5.0.8
+overrides:
+  brace-expansion@<=5.0.7: ^5.0.8
+  js-yaml@<3.15.0: ^3.15.0
+  js-yaml@>=3.0.0 <3.15.0: ^3.15.0

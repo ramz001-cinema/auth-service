@@ -7,6 +7,7 @@ import { OtpModule } from './modules/otp/otp.module'
 import { validateEnv } from './common/config'
 import { AccountModule } from './modules/account/account.module'
 import { UserModule } from './modules/user/user.module';
+import { TelegramModule } from './modules/telegram/telegram.module';
 
 @Module({
 	imports: [
@@ -19,7 +20,8 @@ import { UserModule } from './modules/user/user.module';
 		RedisModule,
 		OtpModule,
 		AccountModule,
-		UserModule
+		UserModule,
+		TelegramModule
 	]
 })
 export class AppModule {}
