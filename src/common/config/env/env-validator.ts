@@ -16,7 +16,11 @@ const envSchema = z.object({
 		.min(3600)
 		.max(2592000), // at least 1 hour, max 30 days
 	OTP_TTL: z.coerce.number().int().positive().min(60).max(3600), // at least 1 minute, max 1 hour
-	OTP_SECRET_KEY: z.string().nonempty()
+	OTP_SECRET_KEY: z.string().nonempty(),
+	TELEGRAM_BOT_ID: z.string().nonempty(),
+	TELEGRAM_BOT_TOKEN: z.string().nonempty(),
+	TELEGRAM_BOT_USERNAME: z.string().nonempty(),
+	TELEGRAM_REDIRECT_ORIGIN: z.url().nonempty()
 })
 
 export function validateEnv(config: Record<string, unknown>) {

@@ -4,3 +4,7 @@ allowBuilds:
   prisma: true
   protobufjs: true
   unrs-resolver: true
+minimumReleaseAgeExclude:
+  - '@ramz001-cinema/contracts'
+  - '@ramz001-cinema/passport'
+  - '@ramz001-cinema/core'
