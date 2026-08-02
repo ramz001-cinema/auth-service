@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TelegramRepository } from './telegram.repository'
 import { TelegramVerifyRequest } from '@ramz001-cinema/contracts/gen/auth/v1'
+import { GrpcException } from '@ramz001-cinema/contracts'
 
 @Injectable()
 export class TelegramService {
@@ -43,8 +44,10 @@ export class TelegramService {
 		const exists =
 			await this.telegramRepository.findByTelegramId(telegramId)
 
-		if (!exists){
-			throw 
+		if (!exists) {
+			throw GrpcException.notFound(
+				'User with this telegram id does not exist'
+			)
 		}
 	}
 }
