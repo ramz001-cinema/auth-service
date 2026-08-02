@@ -2,7 +2,8 @@ import { ContactType } from '@ramz001-cinema/contracts/gen/common/v1'
 
 enum RedisKey {
 	OTP = 'otp',
-	PENDING_CONTACT_CHANGE = 'pending-contact-change'
+	PENDING_CONTACT_CHANGE = 'pending-contact-change',
+	TELEGRAM_SESSION = 'telegram-session'
 }
 
 export class RedisKeys {
@@ -12,5 +13,9 @@ export class RedisKeys {
 
 	static pendingContactChange(user_id: string, type: ContactType) {
 		return `${RedisKey.PENDING_CONTACT_CHANGE}:${type}:${user_id}`
+	}
+
+	static telegramSession(sessionId: string) {
+		return `${RedisKey.TELEGRAM_SESSION}:${sessionId}`
 	}
 }
