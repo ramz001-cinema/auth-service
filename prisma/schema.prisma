@@ -10,6 +10,8 @@ datasource db {
 
 model User {
   id    String  @id @default(nanoid())
+  telegramId String? @unique @map("telegram_id")
+
   phone String? @unique
   email String? @unique
   role  Role    @default(USER)
