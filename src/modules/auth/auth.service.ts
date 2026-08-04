@@ -1,33 +1,22 @@
 import { Injectable } from '@nestjs/common'
 import {
 	SendOtpRequest,
-	VerifyOtpRequest,
-	RefreshTokenRequest
+	VerifyOtpRequest
 } from '@ramz001-cinema/contracts/gen/auth/v1'
 import { GrpcException } from '@ramz001-cinema/contracts'
 import { OtpService } from '../otp/otp.service'
-import { PassportService } from '@ramz001-cinema/passport'
-import { ConfigService } from '@nestjs/config'
-import { EnvType } from '@/common/config'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
 import { UserRepository } from '../user/user.repository'
+import { TokenService } from '../token/token.service'
+import { RefreshTokenRequest } from '@ramz001-cinema/contracts/gen/auth/v1'
 
 @Injectable()
 export class AuthService {
-	private readonly ACCESS_TOKEN_TTL: number
-	private readonly REFRESH_TOKEN_TTL: number
-
 	constructor(
-		private readonly configService: ConfigService<EnvType>,
 		private readonly userRepository: UserRepository,
 		private readonly otpService: OtpService,
-		private readonly passportService: PassportService
-	) {
-		this.ACCESS_TOKEN_TTL =
-			this.configService.get<number>('PASSPORT_ACCESS_TTL') || 900 // default to 15 minutes
-		this.REFRESH_TOKEN_TTL =
-			this.configService.get<number>('PASSPORT_REFRESH_TTL') || 86400 // default to 24 hours
-	}
+		private readonly tokenService: TokenService
+	) {}
 
 	// Handles the logic for sending an OTP code to the user based on the provided identifier (phone or email)
 	async sendOtp(data: SendOtpRequest) {
@@ -61,39 +50,10 @@ export class AuthService {
 
 		await this.userRepository.verifyContact(identifier, type)
 
-		return this.generateTokens(user.id)
+		return this.tokenService.generate(user.id)
 	}
 
 	refreshToken(data: RefreshTokenRequest) {
-		const { refreshToken } = data
-
-		const result = this.passportService.verify(refreshToken)
-
-		if (!result.valid) {
-			throw GrpcException.unauthenticated(
-				result.reason || 'Invalid refresh token'
-			)
-		}
-		if (!result.userId) {
-			throw GrpcException.invalidArgument(
-				'Invalid token payload: missing userId'
-			)
-		}
-
-		return this.generateTokens(result.userId)
-	}
-
-	// Generates access and refresh tokens for a given user ID
-	private generateTokens(userId: string) {
-		return {
-			accessToken: this.passportService.generate(
-				userId,
-				this.ACCESS_TOKEN_TTL
-			),
-			refreshToken: this.passportService.generate(
-				userId,
-				this.REFRESH_TOKEN_TTL
-			)
-		}
+		return this.tokenService.refresh(data)
 	}
 }

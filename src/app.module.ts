@@ -8,6 +8,7 @@ import { validateEnv } from './common/config'
 import { AccountModule } from './modules/account/account.module'
 import { UserModule } from './modules/user/user.module'
 import { TelegramModule } from './modules/telegram/telegram.module'
+import { TokenModule } from './modules/token/token.module'
 
 @Module({
 	imports: [
@@ -21,7 +22,8 @@ import { TelegramModule } from './modules/telegram/telegram.module'
 		OtpModule,
 		AccountModule,
 		UserModule,
-		TelegramModule
+		TelegramModule,
+		TokenModule
 	]
 })
 export class AppModule {}

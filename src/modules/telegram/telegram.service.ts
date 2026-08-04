@@ -3,10 +3,10 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TelegramRepository } from './telegram.repository'
 import { TelegramVerifyRequest } from '@ramz001-cinema/contracts/gen/auth/v1'
-import { GrpcException } from '@ramz001-cinema/contracts'
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { randomBytes } from 'node:crypto'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
+import { TokenService } from '../token/token.service'
 
 @Injectable()
 export class TelegramService {
@@ -18,7 +18,8 @@ export class TelegramService {
 	constructor(
 		private readonly configService: ConfigService<EnvType>,
 		private readonly telegramRepository: TelegramRepository,
-		private readonly redisService: RedisService
+		private readonly redisService: RedisService,
+		private readonly tokenService: TokenService
 	) {
 		this.BOT_ID = this.configService.get('TELEGRAM_BOT_ID') || ''
 		this.BOT_TOKEN = this.configService.get('TELEGRAM_BOT_TOKEN') || ''
@@ -48,10 +49,8 @@ export class TelegramService {
 		const exists =
 			await this.telegramRepository.findByTelegramId(telegramId)
 
-		if (!exists || !exists.phone) {
-			throw GrpcException.notFound(
-				'User with this telegram id does not exist'
-			)
+		if (exists && exists.phone && exists.id) {
+			return this.tokenService.generate(exists.id)
 		}
 
 		const sessionId = randomBytes(16).toString('hex')
