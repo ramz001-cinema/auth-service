@@ -64,4 +64,6 @@ export class TelegramService {
 
 		return { url: `https://t.me/${this.BOT_USERNAME}?start=${sessionId}` }
 	}
+
+	private verifyAuth(query: Record<string, string>) {}
 }
