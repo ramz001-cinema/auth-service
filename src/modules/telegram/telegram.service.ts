@@ -4,9 +4,11 @@ import { ConfigService } from '@nestjs/config'
 import { TelegramRepository } from './telegram.repository'
 import { TelegramVerifyRequest } from '@ramz001-cinema/contracts/gen/auth/v1'
 import { RedisService } from '@/infrastructure/redis/redis.service'
-import { randomBytes } from 'node:crypto'
+import { createHash, createHmac, randomBytes } from 'node:crypto'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
 import { TokenService } from '../token/token.service'
+import { GrpcException } from '@ramz001-cinema/contracts'
+import { timingSafeEqual } from 'node:crypto'
 
 @Injectable()
 export class TelegramService {
@@ -44,6 +46,12 @@ export class TelegramService {
 	}
 
 	async verify(data: TelegramVerifyRequest) {
+		const isValid = this.verifyAuth(data.authResult)
+
+		if (!isValid) {
+			return GrpcException.permissionDenied('Invalid Telegram signature')
+		}
+
 		const telegramId = data.authResult?.id
 
 		const exists =
@@ -65,5 +73,28 @@ export class TelegramService {
 		return { url: `https://t.me/${this.BOT_USERNAME}?start=${sessionId}` }
 	}
 
-	private verifyAuth(query: Record<string, string>) {}
+	private verifyAuth(query: Record<string, string>) {
+		const hash = query.hash
+		if (!hash) return false
+
+		const dataCheckString = Object.keys(query)
+			.filter(key => key !== 'hash')
+			.sort()
+			.map(key => `${key}=${query[key]}`)
+			.join('\n')
+
+		const secretKey = createHash('sha256').update(this.BOT_TOKEN).digest() // raw Buffer
+		const hmac = createHmac('sha256', secretKey)
+			.update(dataCheckString)
+			.digest() // raw Buffer
+
+		// optional: reject data older than 24h
+		const authDate = Number(query.auth_date)
+		if (!authDate || Date.now() / 1000 - authDate > 86400) return false
+
+		const expected = Buffer.from(hash, 'hex')
+		return (
+			hmac.length === expected.length && timingSafeEqual(hmac, expected)
+		)
+	}
 }
