@@ -10,15 +10,21 @@
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
-		"target": "ES2023",
+		"target": "ES2024",
 		"sourceMap": true,
 		"outDir": "./dist",
 		"baseUrl": "./",
 		"ignoreDeprecations": "6.0",
 		"paths": {
-			"@/*": ["src/*"],
-			"@prisma/generated": ["prisma/generated"],
-			"@prisma/generated/*": ["prisma/generated/*"]
+			"@/*": [
+				"src/*"
+			],
+			"@prisma/generated": [
+				"prisma/generated"
+			],
+			"@prisma/generated/*": [
+				"prisma/generated/*"
+			]
 		},
 		"incremental": true,
 		"skipLibCheck": true,
@@ -28,5 +34,9 @@
 		"strictBindCallApply": false,
 		"noFallthroughCasesInSwitch": false
 	},
-	"exclude": ["node_modules", "dist", "test"]
+	"exclude": [
+		"node_modules",
+		"dist",
+		"test"
+	]
 }
