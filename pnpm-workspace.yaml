@@ -1,12 +1,14 @@
 allowBuilds:
-    '@nestjs/core': true
-    '@prisma/engines': true
-    prisma: true
-    protobufjs: true
-    unrs-resolver: true
+  '@nestjs/core': true
+  '@prisma/engines': true
+  prisma: true
+  protobufjs: true
+  unrs-resolver: true
 minimumReleaseAgeExclude:
-    - '@ramz001-cinema/contracts'
-    - '@ramz001-cinema/passport'
-    - '@ramz001-cinema/core'
-    - js-yaml@3.15.0
-    - brace-expansion@5.0.8
+  - '@ramz001-cinema/contracts'
+  - '@ramz001-cinema/passport'
+  - '@ramz001-cinema/core'
+  - js-yaml@3.15.0
+  - brace-expansion@5.0.8
+overrides:
+  js-yaml@>=3.0.0 <3.15.1: ^3.15.1
