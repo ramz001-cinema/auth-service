@@ -49,7 +49,7 @@ export class TelegramService {
 		const isValid = this.verifyAuth(data.authResult)
 
 		if (!isValid) {
-			return GrpcException.permissionDenied('Invalid Telegram signature')
+			throw GrpcException.permissionDenied('Invalid Telegram signature')
 		}
 
 		const telegramId = data.authResult?.id

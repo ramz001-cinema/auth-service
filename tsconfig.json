@@ -1,20 +1,9 @@
 {
+	"extends": "@ramz001-cinema/core/tsconfig/nest",
 	"compilerOptions": {
-		"module": "nodenext",
-		"moduleResolution": "nodenext",
-		"resolvePackageJsonExports": true,
-		"esModuleInterop": true,
-		"isolatedModules": true,
-		"declaration": true,
-		"removeComments": true,
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"target": "ES2024",
-		"sourceMap": true,
 		"outDir": "./dist",
+		"rootDir": "./",
 		"baseUrl": "./",
-		"ignoreDeprecations": "6.0",
 		"paths": {
 			"@/*": [
 				"src/*"
@@ -25,14 +14,7 @@
 			"@prisma/generated/*": [
 				"prisma/generated/*"
 			]
-		},
-		"incremental": true,
-		"skipLibCheck": true,
-		"strictNullChecks": true,
-		"forceConsistentCasingInFileNames": true,
-		"noImplicitAny": false,
-		"strictBindCallApply": false,
-		"noFallthroughCasesInSwitch": false
+		}
 	},
 	"exclude": [
 		"node_modules",
