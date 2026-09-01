@@ -13,9 +13,9 @@ import { timingSafeEqual } from 'node:crypto'
 @Injectable()
 export class TelegramService {
 	private readonly BOT_ID: string
-	private readonly BOT_SECRET: string
 	private readonly BOT_USERNAME: string
 	private readonly REDIRECT_ORIGIN: string
+	private readonly BOT_TOKEN: string
 
 	constructor(
 		private readonly configService: ConfigService<EnvType>,
@@ -24,11 +24,13 @@ export class TelegramService {
 		private readonly tokenService: TokenService
 	) {
 		this.BOT_ID = this.configService.get('TELEGRAM_BOT_ID') || ''
-		this.BOT_SECRET = this.configService.get('TELEGRAM_BOT_SECRET') || ''
 		this.BOT_USERNAME =
 			this.configService.get('TELEGRAM_BOT_USERNAME') || ''
 		this.REDIRECT_ORIGIN =
 			this.configService.get('TELEGRAM_REDIRECT_ORIGIN') || ''
+
+		this.BOT_TOKEN =
+			this.BOT_ID + ':' + this.configService.get('TELEGRAM_BOT_SECRET')
 	}
 
 	getAuthUrl() {
@@ -47,7 +49,7 @@ export class TelegramService {
 
 	async verify(data: TelegramVerifyRequest) {
 		const isValid = this.verifyAuth(data.authResult)
-
+		console.log(data.authResult)
 		if (!isValid) {
 			throw GrpcException.permissionDenied('Invalid Telegram signature')
 		}
@@ -83,7 +85,7 @@ export class TelegramService {
 			.map(key => `${key}=${query[key]}`)
 			.join('\n')
 
-		const secretKey = createHash('sha256').update(this.BOT_SECRET).digest() // raw Buffer
+		const secretKey = createHash('sha256').update(this.BOT_TOKEN).digest() // raw Buffer
 		const hmac = createHmac('sha256', secretKey)
 			.update(dataCheckString)
 			.digest() // raw Buffer
