@@ -16,6 +16,15 @@ export class TelegramController {
 	async verify(
 		data: v1.TelegramVerifyRequest
 	): Promise<v1.TelegramVerifyResponse> {
-		return this.telegramService.verify(data)
+		return await this.telegramService.verify(data)
+	}
+
+	@GrpcMethod('AuthService', 'TelegramComplete')
+	async complete(
+		data: v1.TelegramCompleteRequest
+	): Promise<v1.TelegramCompleteResponse> {
+		console.log('Received TelegramCompleteRequest:', data)
+
+		return await this.telegramService.complete(data)
 	}
 }

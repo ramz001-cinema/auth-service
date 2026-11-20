@@ -2,7 +2,10 @@ import { EnvType } from '@/common/config'
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { TelegramRepository } from './telegram.repository'
-import { TelegramVerifyRequest } from '@ramz001-cinema/contracts/gen/auth/v1'
+import {
+	TelegramCompleteRequest,
+	TelegramVerifyRequest
+} from '@ramz001-cinema/contracts/gen/auth/v1'
 import { RedisService } from '@/infrastructure/redis/redis.service'
 import { createHash, createHmac, randomBytes } from 'node:crypto'
 import { RedisKeys } from '@/infrastructure/redis/redis.constants'
@@ -98,5 +101,19 @@ export class TelegramService {
 		return (
 			hmac.length === expected.length && timingSafeEqual(hmac, expected)
 		)
+	}
+
+	async complete(data: TelegramCompleteRequest) {
+		const { sessionId } = data
+		const sessionData = await this.redisService.get(
+			RedisKeys.telegramSession(sessionId)
+		)
+
+		if (!sessionData) {
+			throw GrpcException.notFound('Session not found')
+		}
+
+		console.log('Parsed session data:', sessionData)
+		return { sessionId }
 	}
 }
